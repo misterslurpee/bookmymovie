@@ -15,8 +15,8 @@ import org.json.JSONObject;
 
 public class MovieProxy {
 
-    private static String baseUrlString = "https://api.themoviedb.org/3";
-    private static String key = "8d14316a3ad3955af1670a00e39e50ab";
+    private static final String BASE_URL_STRING = "https://api.themoviedb.org/3";
+    private static final String KEY = "8d14316a3ad3955af1670a00e39e50ab";
 
     private List<Movie> lastMovies;
     private LocalDateTime lastUpdate;
@@ -28,11 +28,11 @@ public class MovieProxy {
 
     public String get(String relUrlString, String query) throws Exception {
         if (query == null) {
-            query = "api_key=" + key;
+            query = "api_key=" + KEY;
         } else {
-            query = query + "&api_key=" + key;
+            query = query + "&api_key=" + KEY;
         }
-        URL url = new URL(baseUrlString + relUrlString + "?" + query + "&api_key=" + key);
+        URL url = new URL(BASE_URL_STRING + relUrlString + "?" + query + "&api_key=" + KEY);
 
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -47,10 +47,15 @@ public class MovieProxy {
         return response.toString();
     }
 
+    private boolean isValidMovieJson(JSONObject movieJson) {
+        return movieJson.has("poster_path") && !movieJson.isNull("poster_path");
+    }
+
     private void updateLastMovies() throws Exception {
         final String relUrl = "/discover/movie";
         String lastDate = LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_LOCAL_DATE);
-        final String query = "primary_release_date.gte=" + lastDate;
+        final String query = "primary_release_date.gte=" + lastDate
+                + "&with_original_language=en";
         String result = get(relUrl, query);
         JSONObject jsonObject = new JSONObject(result);
         JSONArray moviesJsonArray = jsonObject.getJSONArray("results");
@@ -58,7 +63,9 @@ public class MovieProxy {
         lastMovies.clear();
         for (int i = 0; i < moviesJsonArray.length(); i++) {
             JSONObject movieJson = moviesJsonArray.getJSONObject(i);
-            lastMovies.add(Movie.parseMovie(movieJson));
+            if (isValidMovieJson(movieJson)) {
+                lastMovies.add(Movie.parseMovie(movieJson));
+            }
         }
         lastUpdate = LocalDateTime.now();
     }

@@ -47,5 +47,6 @@ public class MovieProxy {
             JSONObject movieJson = moviesJsonArray.getJSONObject(i);
             movies.add(Movie.parseMovie(movieJson));
         }
+        return movies;
     }
 }

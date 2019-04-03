@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 public class MovieController {
@@ -16,11 +17,14 @@ public class MovieController {
         this.movieRepository = movieRepository;
         this.movieProxy = movieProxy;
     }
+    
+    @RequestMapping("/")
+    public RedirectView redirectToMovies() {
+        return new RedirectView("/movies");
+    }
 
     @RequestMapping("/movies")
     public List<Movie> movies() throws Exception {
-//        movieRepository.save(new Movie("Dilan", "Anak Bandung"));
-//        return movieRepository.findAll(Sort.by("startTime"));
         return movieProxy.getLastMovies();
     }
 }

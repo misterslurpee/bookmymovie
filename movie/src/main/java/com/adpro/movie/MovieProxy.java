@@ -4,19 +4,27 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.boot.json.BasicJsonParser;
 
 public class MovieProxy {
 
     private static String baseUrlString = "https://api.themoviedb.org/3";
     private static String key = "8d14316a3ad3955af1670a00e39e50ab";
+
+    private List<Movie> lastMovies;
+    private LocalDateTime lastUpdate;
+
+    public MovieProxy() throws Exception {
+        lastMovies = new ArrayList<>();
+        lastUpdate = LocalDateTime.MIN;
+    }
 
     public String get(String relUrlString, String query) throws Exception {
         URL url = new URL(baseUrlString + relUrlString + "?" + query + "api_key=" + key);
@@ -34,7 +42,7 @@ public class MovieProxy {
         return response.toString();
     }
 
-    public List<Movie> getLastMovies() throws Exception {
+    private void updateLastMovies() throws Exception {
         final String relUrl = "/discover/movie";
         String lastDate = LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_LOCAL_DATE);
         final String query = "primary_release_date.gte=" + lastDate;
@@ -42,11 +50,18 @@ public class MovieProxy {
         JSONObject jsonObject = new JSONObject(result);
         JSONArray moviesJsonArray = jsonObject.getJSONArray("results");
 
-        List<Movie> movies = new ArrayList<>();
+        lastMovies.clear();
         for (int i = 0; i < moviesJsonArray.length(); i++) {
             JSONObject movieJson = moviesJsonArray.getJSONObject(i);
-            movies.add(Movie.parseMovie(movieJson));
+            lastMovies.add(Movie.parseMovie(movieJson));
         }
-        return movies;
+        lastUpdate = LocalDateTime.now();
+    }
+
+    public List<Movie> getLastMovies() throws Exception {
+        if (Duration.between(lastUpdate, LocalDateTime.now()).toMinutes() > 1) {
+            updateLastMovies();
+        }
+        return lastMovies;
     }
 }

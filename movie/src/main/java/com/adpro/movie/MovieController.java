@@ -17,7 +17,7 @@ public class MovieController {
         this.movieRepository = movieRepository;
         this.movieProxy = movieProxy;
     }
-    
+
     @RequestMapping("/")
     public RedirectView redirectToMovies() {
         return new RedirectView("/movies");

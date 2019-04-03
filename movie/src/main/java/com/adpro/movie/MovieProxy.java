@@ -27,7 +27,12 @@ public class MovieProxy {
     }
 
     public String get(String relUrlString, String query) throws Exception {
-        URL url = new URL(baseUrlString + relUrlString + "?" + query + "api_key=" + key);
+        if (query == null) {
+            query = "api_key=" + key;
+        } else {
+            query = query + "&api_key=" + key;
+        }
+        URL url = new URL(baseUrlString + relUrlString + "?" + query + "&api_key=" + key);
 
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 

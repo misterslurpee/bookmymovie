@@ -1,5 +1,6 @@
 package com.adpro.movie;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +9,7 @@ import javax.persistence.Id;
 import org.json.JSONObject;
 
 @Entity
-public class Movie {
+public class Movie implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

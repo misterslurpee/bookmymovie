@@ -12,16 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class MovieProxy {
 
     private static final String BASE_URL_STRING = "https://api.themoviedb.org/3";
     private static final String KEY = "8d14316a3ad3955af1670a00e39e50ab";
 
+    private MovieRepository movieRepository;
     private List<Movie> lastMovies;
     private LocalDateTime lastUpdate;
 
-    public MovieProxy() throws Exception {
+    @Autowired
+    public MovieProxy(MovieRepository movieRepository) throws Exception {
+        this.movieRepository = movieRepository;
         lastMovies = new ArrayList<>();
         lastUpdate = LocalDateTime.MIN;
     }
@@ -64,7 +68,12 @@ public class MovieProxy {
         for (int i = 0; i < moviesJsonArray.length(); i++) {
             JSONObject movieJson = moviesJsonArray.getJSONObject(i);
             if (isValidMovieJson(movieJson)) {
-                lastMovies.add(Movie.parseMovie(movieJson));
+                Movie movie = Movie.parseMovie(movieJson);
+                lastMovies.add(movie);
+                Movie existingMovie = movieRepository.findMovieByName(movie.getName());
+                if (existingMovie == null) {
+                    movieRepository.save(movie);
+                }
             }
         }
         lastUpdate = LocalDateTime.now();

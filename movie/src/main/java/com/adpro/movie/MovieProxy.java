@@ -51,30 +51,45 @@ public class MovieProxy {
         return response.toString();
     }
 
+    public JSONObject getJson(String relUrlString, String query) throws Exception {
+        return new JSONObject(get(relUrlString, query));
+    }
+
     private boolean isValidMovieJson(JSONObject movieJson) {
         return movieJson.has("poster_path") && !movieJson.isNull("poster_path");
     }
 
+    /**
+     * Get full JSON movie from the individual movie API.
+     * @param movieJson the partial movie JSON
+     * @return the Movie object
+     */
+    private Movie getMovie(JSONObject movieJson) throws Exception {
+        final String relUrl = "/movie/" + movieJson.getInt("id");
+        JSONObject result = getJson(relUrl, null);
+        return Movie.parseMovie(result);
+    }
+
     private void updateLastMovies() throws Exception {
         final String relUrl = "/discover/movie";
+        String nowDate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
         String lastDate = LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_LOCAL_DATE);
         final String query = "primary_release_date.gte=" + lastDate
+                + "&primary_release_date.lte=" + nowDate
                 + "&with_original_language=en";
-        String result = get(relUrl, query);
-        JSONObject jsonObject = new JSONObject(result);
-        JSONArray moviesJsonArray = jsonObject.getJSONArray("results");
+        JSONObject result = getJson(relUrl, query);
+        JSONArray moviesJsonArray = result.getJSONArray("results");
 
         lastMovies.clear();
         for (int i = 0; i < moviesJsonArray.length(); i++) {
             JSONObject movieJson = moviesJsonArray.getJSONObject(i);
             if (isValidMovieJson(movieJson)) {
                 String movieName = movieJson.getString("title");
-                Movie existingMovie = movieRepository.findMovieByName(movieName);
-                if (existingMovie == null) {
-                    Movie movie = getMovie(movieJson);
+                Movie movie = movieRepository.findMovieByName(movieName);
+                if (movie == null) {
+                    movie = getMovie(movieJson);
                     movieRepository.save(movie);
                 }
-                Movie movie = Movie.parseMovie(movieJson);
                 lastMovies.add(movie);
             }
         }

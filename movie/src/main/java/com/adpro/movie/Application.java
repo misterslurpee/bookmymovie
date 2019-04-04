@@ -1,5 +1,6 @@
 package com.adpro.movie;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +13,9 @@ public class Application {
 	}
 
 	@Bean
-	public MovieProxy getMovieProxy() throws Exception {
-		return new MovieProxy();
+	@Autowired
+	public MovieProxy getMovieProxy(MovieRepository movieRepository) throws Exception {
+		return new MovieProxy(movieRepository);
 	}
 
 }

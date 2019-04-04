@@ -1,14 +1,16 @@
 package com.adpro.movie;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import org.json.JSONObject;
 
 @Entity
@@ -21,6 +23,7 @@ public class Movie implements Serializable {
     private Long id;
     @Column(unique=true)
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String posterUrl;
     private LocalDate releaseDate;
@@ -28,29 +31,30 @@ public class Movie implements Serializable {
 
     protected Movie() {}
 
-    public Movie(String name, String description, String posterUrl, Duration duration) {
+    public Movie(String name, String description, String posterUrl, LocalDate releaseDate, Duration duration) {
         this.name = name;
         this.description = description;
         this.posterUrl = posterUrl;
+        this.releaseDate = releaseDate;
         this.duration = duration;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.releaseDate = LocalDate.now();
     }
 
     /**
      * Parse movie from JSON returned by https://api.themoviedb.org/3/
-     * @param movieJson
-     * @return
+     * @param movieJson the JSON object from the API
+     * @return the Movie object.
      */
     public static Movie parseMovie(JSONObject movieJson) {
         String name = movieJson.getString("original_title");
         String description = movieJson.getString("overview");
         String posterUrl = BASE_POSTER_URL + movieJson.getString("poster_path");
-        Duration duration = Duration.ofMinutes(movieJson.getInt("runtime"));
-        return new Movie(name, description, posterUrl, duration);
+        LocalDate releaseDate = LocalDate.parse(movieJson.getString("release_date"));
+        Object intDuration = movieJson.get("runtime");
+        if (intDuration == JSONObject.NULL) {
+            intDuration = 120;
+        }
+        Duration duration = Duration.ofMinutes((int)intDuration);
+        return new Movie(name, description, posterUrl, releaseDate, duration);
     }
 
     public String getName() {
@@ -83,5 +87,23 @@ public class Movie implements Serializable {
 
     public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    /**
+     * A hackish trick to format duration as HH:MM:SS
+     * @return the LocalTime representation of duration
+     */
+    @JsonProperty("duration")
+    public LocalTime getDurationTime() {
+        return LocalTime.of(0, 0, 0).plus(duration);
+    }
+
+    @JsonIgnoreProperties
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 }

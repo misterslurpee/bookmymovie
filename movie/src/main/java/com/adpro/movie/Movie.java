@@ -1,12 +1,12 @@
 package com.adpro.movie;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.adpro.movie.tmdb.TMDBMovie;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import org.json.JSONObject;
+import java.io.Serializable;
 
 @Entity
 public class Movie implements Serializable {
@@ -28,10 +28,10 @@ public class Movie implements Serializable {
         this.posterUrl = posterUrl;
     }
 
-    public static Movie parseMovie(JSONObject movieJson) {
-        String name = movieJson.getString("original_title");
-        String description = movieJson.getString("overview");
-        String posterUrl = BASE_POSTER_URL + movieJson.getString("poster_path");
+    public static Movie fromTMDBMovie(TMDBMovie movie) {
+        String name = movie.getOriginalTitle();
+        String description = movie.getOverview();
+        String posterUrl = BASE_POSTER_URL + movie.getPosterPath();
         return new Movie(name, description, posterUrl);
     }
 

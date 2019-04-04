@@ -68,12 +68,14 @@ public class MovieProxy {
         for (int i = 0; i < moviesJsonArray.length(); i++) {
             JSONObject movieJson = moviesJsonArray.getJSONObject(i);
             if (isValidMovieJson(movieJson)) {
-                Movie movie = Movie.parseMovie(movieJson);
-                lastMovies.add(movie);
-                Movie existingMovie = movieRepository.findMovieByName(movie.getName());
+                String movieName = movieJson.getString("title");
+                Movie existingMovie = movieRepository.findMovieByName(movieName);
                 if (existingMovie == null) {
+                    Movie movie = getMovie(movieJson);
                     movieRepository.save(movie);
                 }
+                Movie movie = Movie.parseMovie(movieJson);
+                lastMovies.add(movie);
             }
         }
         lastUpdate = LocalDateTime.now();

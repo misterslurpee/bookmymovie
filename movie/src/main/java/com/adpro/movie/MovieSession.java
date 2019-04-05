@@ -17,10 +17,10 @@ public class MovieSession {
 
     protected MovieSession() {}
 
-    public MovieSession(Movie movie, LocalDateTime startTime, LocalDateTime endTime) {
+    public MovieSession(Movie movie, LocalDateTime startTime) {
         this.movie = movie;
         this.startTime = startTime;
-        this.endTime = endTime;
+        this.endTime = startTime.plus(movie.getDuration());
     }
 
     public Movie getMovie() {

@@ -5,14 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class MovieSession {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
+
+    @OneToOne
     private Movie movie;
+
     private LocalDateTime startTime;
+
     private LocalDateTime endTime;
 
     protected MovieSession() {}
@@ -21,6 +26,10 @@ public class MovieSession {
         this.movie = movie;
         this.startTime = startTime;
         this.endTime = startTime.plus(movie.getDuration());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Movie getMovie() {

@@ -21,12 +21,16 @@ public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(unique=true)
+
     private String name;
+
     @Column(columnDefinition = "TEXT")
     private String description;
+
     private String posterUrl;
+
     private LocalDate releaseDate;
+
     private Duration duration;
 
     protected Movie() {}
@@ -55,6 +59,10 @@ public class Movie implements Serializable {
         }
         Duration duration = Duration.ofMinutes((int)intDuration);
         return new Movie(name, description, posterUrl, releaseDate, duration);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

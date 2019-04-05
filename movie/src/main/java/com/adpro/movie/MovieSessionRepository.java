@@ -5,5 +5,7 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MovieSessionRepository extends CrudRepository<MovieSession, Long> {
-    public List<Movie> findMovieSessionsByStartTimeAfter(LocalDateTime localDateTime);
+    List<MovieSession> findMovieSessionsByStartTimeAfter(LocalDateTime localDateTime);
+    List<MovieSession> findMovieSessionsByMovieIdAndStartTimeAfter(Long movieId, LocalDateTime dateTime);
+    List<MovieSession> findMovieSessionsByMovieId(Long movieId);
 }

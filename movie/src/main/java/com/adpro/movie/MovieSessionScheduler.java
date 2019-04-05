@@ -1,14 +1,16 @@
 package com.adpro.movie;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MovieSessionScheduler {
 
     private MovieRepository movieRepository;
@@ -34,12 +36,16 @@ public class MovieSessionScheduler {
         List<Movie> movies = movieRepository.findMoviesByReleaseDateAfter(LocalDate.now().minusDays(14));
         LocalDate dateNow = LocalDate.now();
 
-        List<Movie> alreadyCreatedTodayMovieSession = movieSessionRepository.findMovieSessionsByStartTimeAfter(
+        List<MovieSession> alreadyCreatedTodayMovieSession = movieSessionRepository.findMovieSessionsByStartTimeAfter(
                 LocalDate.now().atStartOfDay());
+
+        for (MovieSession s: alreadyCreatedTodayMovieSession) {
+            System.out.println(s.getMovie().getId() + " " + s.getStartTime());
+        }
 
         if (alreadyCreatedTodayMovieSession.size() == 0) {
             for (Movie movie : movies) {
-                long alreadyShowedFor = Duration.between(movie.getReleaseDate(), dateNow).toDays();
+                long alreadyShowedFor = Period.between(movie.getReleaseDate(), dateNow).getDays();
                 if (alreadyShowedFor < 5) {
                     movieSessionRepository.save(new MovieSession(movie,
                             LocalDateTime.of(dateNow, LocalTime.of(10, 0))));

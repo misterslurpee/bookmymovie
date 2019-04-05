@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class MovieSession {
@@ -14,10 +15,13 @@ public class MovieSession {
     private Long id;
 
     @OneToOne
+    @NotNull
     private Movie movie;
 
+    @NotNull
     private LocalDateTime startTime;
 
+    @NotNull
     private LocalDateTime endTime;
 
     protected MovieSession() {}

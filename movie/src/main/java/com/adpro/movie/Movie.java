@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import org.json.JSONObject;
 
 @Entity
@@ -22,20 +23,23 @@ public class Movie implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     private String name;
 
     @Column(columnDefinition = "TEXT")
+    @NotNull
     private String description;
 
     private String posterUrl;
 
     private LocalDate releaseDate;
 
+    @NotNull
     private Duration duration;
 
     protected Movie() {}
 
-    public Movie(String name, String description, String posterUrl, LocalDate releaseDate, Duration duration) {
+    private Movie(String name, String description, String posterUrl, LocalDate releaseDate, Duration duration) {
         this.name = name;
         this.description = description;
         this.posterUrl = posterUrl;

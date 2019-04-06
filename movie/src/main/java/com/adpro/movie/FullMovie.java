@@ -18,12 +18,13 @@ public class FullMovie extends Movie {
     @NotNull
     private Duration duration;
 
-    private FullMovie(String name, String description, String posterUrl, LocalDate releaseDate, Duration duration) {
-        super(name, description, posterUrl, releaseDate);
+    private FullMovie(Long tmdbId, String name, String description, String posterUrl, LocalDate releaseDate, Duration duration) {
+        super(tmdbId, name, description, posterUrl, releaseDate);
         this.duration = duration;
     }
 
-    public static FullMovie fromTMDBMovie(FullTMDBMovie movie) {
+    public static FullMovie fromTMDBMovie(@NotNull FullTMDBMovie movie) {
+        Long tmdbId = movie.getId();
         String name = movie.getOriginalTitle();
         String description = movie.getOverview();
         String posterUrl = BASE_POSTER_URL + movie.getPosterPath();
@@ -32,7 +33,7 @@ public class FullMovie extends Movie {
         if (duration == null) {
             duration = Duration.ofMinutes(120);
         }
-        return new FullMovie(name, description, posterUrl, releaseDate, duration);
+        return new FullMovie(tmdbId, name, description, posterUrl, releaseDate, duration);
     }
 
     /**

@@ -4,19 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jdk8.OptionalSerializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.DurationDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.DurationSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import org.springframework.lang.Nullable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TMDBMovie {
+public abstract class TMDBMovie {
+
+    @NotNull
+    private Long id;
 
     @NotNull
     private String originalTitle;
@@ -32,8 +31,14 @@ public class TMDBMovie {
     @NotNull
     private LocalDate releaseDate;
 
-    @NotNull
-    private Optional<Duration> duration;
+    public Long getId() {
+        return id;
+    }
+
+    @JsonProperty("id")
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getOriginalTitle() {
         return originalTitle;
@@ -48,6 +53,7 @@ public class TMDBMovie {
         return overview;
     }
 
+    @JsonProperty("overview")
     public void setOverview(String overview) {
         this.overview = overview;
     }
@@ -70,15 +76,4 @@ public class TMDBMovie {
         this.releaseDate = releaseDate;
     }
 
-    public Optional<Duration> getDuration() {
-        return duration;
-    }
-
-    @JsonProperty("runtime")
-    @JsonSerialize(using = DurationSerializer.class)
-    @JsonDeserialize(using = DurationDeserializer.class)
-    public void setDuration(Duration duration) {
-        System.out.println("Masuk");
-        this.duration = Optional.of(duration);
-    }
 }

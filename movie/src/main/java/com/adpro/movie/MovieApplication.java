@@ -1,5 +1,6 @@
 package com.adpro.movie;
 
+import com.adpro.movie.tmdb.TMDBRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,8 +17,8 @@ public class MovieApplication {
 
 	@Bean
 	@Autowired
-	public MovieProxy getMovieProxy(MovieRepository movieRepository) throws Exception {
-		return new MovieProxy(movieRepository);
+	public TMDBRepository getTmdbRepository(MovieRepository movieRepository) throws Exception {
+		return new TMDBRepository(movieRepository);
 	}
 
 }

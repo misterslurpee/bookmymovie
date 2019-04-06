@@ -1,5 +1,6 @@
 package com.adpro.movie;
 
+import com.adpro.movie.tmdb.TMDBRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ public class MovieController {
 
     @Autowired
     private MovieRepository movieRepository;
-    @Autowired
-    private MovieProxy movieProxy;
+
     @Autowired
     private MovieSessionRepository movieSessionRepository;
+
+    @Autowired
+    private TMDBRepository tmdbRepository;
 
     @RequestMapping("/")
     public RedirectView redirectToMovies() {
@@ -25,8 +28,8 @@ public class MovieController {
     }
 
     @RequestMapping("/movies")
-    public List<Movie> movies() throws Exception {
-        return movieProxy.getLastMovies();
+    public List<PartialMovie> movies() throws Exception {
+        return tmdbRepository.getLastMovies();
     }
 
     @RequestMapping("/movie/{movieId}")

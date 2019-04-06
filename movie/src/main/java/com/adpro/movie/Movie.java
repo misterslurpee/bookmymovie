@@ -24,6 +24,8 @@ public abstract class Movie implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private Long tmdbId;
+
     @NotNull
     private String name;
 
@@ -39,11 +41,16 @@ public abstract class Movie implements Serializable {
 
     protected Movie() {}
 
-    protected Movie(String name, String description, String posterUrl, LocalDate releaseDate) {
+    protected Movie(Long tmdbId, String name, String description, String posterUrl, LocalDate releaseDate) {
+        this.tmdbId = tmdbId;
         this.name = name;
         this.description = description;
         this.posterUrl = posterUrl;
         this.releaseDate = releaseDate;
+    }
+
+    public Long getTmdbId() {
+        return tmdbId;
     }
 
     public String getName() {

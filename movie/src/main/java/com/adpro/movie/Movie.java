@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 import javax.persistence.Column;
 import com.adpro.movie.tmdb.TMDBMovie;
 import javax.persistence.Entity;
@@ -53,10 +54,7 @@ public class Movie implements Serializable {
         String description = movie.getOverview();
         String posterUrl = BASE_POSTER_URL + movie.getPosterPath();
         LocalDate releaseDate = movie.getReleaseDate();
-        Duration duration = movie.getDuration();
-        if (duration == null) {
-            duration = Duration.ofMinutes(120);
-        }
+        Duration duration = movie.getDuration().orElse(Duration.ofMinutes(120));
         return new Movie(name, description, posterUrl, releaseDate, duration);
     }
 

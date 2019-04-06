@@ -1,7 +1,13 @@
 package com.adpro.movie;
 
+import com.adpro.movie.tmdb.FullTMDBMovie;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -16,7 +22,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="is_complete", discriminatorType = DiscriminatorType.INTEGER)
-public abstract class Movie implements Serializable {
+public class Movie implements Serializable {
 
     static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -39,18 +45,45 @@ public abstract class Movie implements Serializable {
     @NotNull
     private LocalDate releaseDate;
 
+    @NotNull
+    private Duration duration;
+
     protected Movie() {}
 
-    protected Movie(Long tmdbId, String name, String description, String posterUrl, LocalDate releaseDate) {
+    private Movie(Long tmdbId,
+                  String name,
+                  String description,
+                  String posterUrl,
+                  LocalDate releaseDate,
+                  Duration duration) {
         this.tmdbId = tmdbId;
         this.name = name;
         this.description = description;
         this.posterUrl = posterUrl;
         this.releaseDate = releaseDate;
+        this.duration = duration;
     }
 
+    public static Movie fromTMDBMovie(@NotNull FullTMDBMovie movie) {
+        Long tmdbId = movie.getId();
+        String name = movie.getOriginalTitle();
+        String description = movie.getOverview();
+        String posterUrl = BASE_POSTER_URL + movie.getPosterPath();
+        LocalDate releaseDate = movie.getReleaseDate();
+        Duration duration = movie.getDuration();
+        if (duration == null) {
+            duration = Duration.ofMinutes(120);
+        }
+        return new Movie(tmdbId, name, description, posterUrl, releaseDate, duration);
+    }
+
+    @JsonIgnore
     public Long getTmdbId() {
         return tmdbId;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -83,5 +116,23 @@ public abstract class Movie implements Serializable {
 
     public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    /**
+     * A hackish trick to format duration as HH:MM:SS
+     * @return the LocalTime representation of duration
+     */
+    @JsonProperty("duration")
+    public LocalTime getDurationTime() {
+        return LocalTime.of(0, 0, 0).plus(duration);
+    }
+
+    @JsonIgnoreProperties
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 }

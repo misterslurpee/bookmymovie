@@ -21,4 +21,10 @@ public class MovieApplication {
 		return new TMDBRepository(movieRepository);
 	}
 
+	@Bean
+	@Autowired
+	public MovieListProxy getMovieListProxy(MovieRepository movieRepository) {
+		return new MovieListProxy(movieRepository);
+	}
+
 }

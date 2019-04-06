@@ -16,7 +16,7 @@ public class MovieSession {
 
     @OneToOne
     @NotNull
-    private FullMovie movie;
+    private Movie movie;
 
     @NotNull
     private LocalDateTime startTime;
@@ -26,7 +26,7 @@ public class MovieSession {
 
     protected MovieSession() {}
 
-    public MovieSession(FullMovie movie, LocalDateTime startTime) {
+    public MovieSession(Movie movie, LocalDateTime startTime) {
         this.movie = movie;
         this.startTime = startTime;
         this.endTime = startTime.plus(movie.getDuration());
@@ -40,7 +40,7 @@ public class MovieSession {
         return movie;
     }
 
-    public void setMovie(FullMovie movie) {
+    public void setMovie(Movie movie) {
         this.movie = movie;
     }
 

@@ -2,10 +2,10 @@ package com.adpro.movie.tmdb;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
-import org.springframework.lang.Nullable;
+import javax.validation.constraints.NotNull;
 
 public class FullTMDBMovie extends TMDBMovie {
-    @Nullable
+    @NotNull
     private Duration duration;
 
     public Duration getDuration() {
@@ -13,10 +13,11 @@ public class FullTMDBMovie extends TMDBMovie {
     }
 
     @JsonProperty("runtime")
-    public void setDuration(Duration duration) {
-        if (duration == null) {
+    public void setDuration(Long minDuration) {
+        if (minDuration == null) {
             duration = Duration.ofMinutes(120);
+        } else {
+            duration = Duration.ofMinutes(minDuration);
         }
-        this.duration = duration;
     }
 }

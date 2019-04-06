@@ -7,12 +7,13 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import javax.persistence.Column;
+import com.adpro.movie.tmdb.TMDBMovie;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import org.json.JSONObject;
+import java.io.Serializable;
 
 @Entity
 public class Movie implements Serializable {
@@ -47,26 +48,16 @@ public class Movie implements Serializable {
         this.duration = duration;
     }
 
-    /**
-     * Parse movie from JSON returned by https://api.themoviedb.org/3/
-     * @param movieJson the JSON object from the API
-     * @return the Movie object.
-     */
-    public static Movie parseMovie(JSONObject movieJson) {
-        String name = movieJson.getString("original_title");
-        String description = movieJson.getString("overview");
-        String posterUrl = BASE_POSTER_URL + movieJson.getString("poster_path");
-        LocalDate releaseDate = LocalDate.parse(movieJson.getString("release_date"));
-        Object intDuration = movieJson.get("runtime");
-        if (intDuration == JSONObject.NULL) {
-            intDuration = 120;
+    public static Movie fromTMDBMovie(TMDBMovie movie) {
+        String name = movie.getOriginalTitle();
+        String description = movie.getOverview();
+        String posterUrl = BASE_POSTER_URL + movie.getPosterPath();
+        LocalDate releaseDate = movie.getReleaseDate();
+        Duration duration = movie.getDuration();
+        if (duration == null) {
+            duration = Duration.ofMinutes(120);
         }
-        Duration duration = Duration.ofMinutes((int)intDuration);
         return new Movie(name, description, posterUrl, releaseDate, duration);
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

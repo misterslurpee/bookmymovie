@@ -39,10 +39,6 @@ public class MovieSessionScheduler {
         List<MovieSession> alreadyCreatedTodayMovieSession = movieSessionRepository.findMovieSessionsByStartTimeAfter(
                 LocalDate.now().atStartOfDay());
 
-        for (MovieSession s: alreadyCreatedTodayMovieSession) {
-            System.out.println(s.getMovie().getId() + " " + s.getStartTime());
-        }
-
         if (alreadyCreatedTodayMovieSession.size() == 0) {
             for (Movie movie : movies) {
                 long alreadyShowedFor = Period.between(movie.getReleaseDate(), dateNow).getDays();

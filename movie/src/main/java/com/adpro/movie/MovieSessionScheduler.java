@@ -33,7 +33,8 @@ public class MovieSessionScheduler {
     }
 
     public void createMovieSession() {
-        List<Movie> movies = movieRepository.findMoviesByReleaseDateAfter(LocalDate.now().minusDays(14));
+        List<Movie> movies = movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(
+                LocalDate.now().minusDays(14), LocalDate.now());
         LocalDate dateNow = LocalDate.now();
 
         List<MovieSession> alreadyCreatedTodayMovieSession = movieSessionRepository.findMovieSessionsByStartTimeAfter(

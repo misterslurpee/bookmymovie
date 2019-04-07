@@ -3,16 +3,16 @@ package com.adpro.movie.tmdb;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import javax.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public class FullTMDBMovie extends TMDBMovie {
     @NotNull
+    @JsonProperty("runtime")
+    @Getter
     private Duration duration;
 
-    public Duration getDuration() {
-        return duration;
-    }
-
-    @JsonProperty("runtime")
     public void setDuration(Long minDuration) {
         if (minDuration == null) {
             duration = Duration.ofMinutes(120);

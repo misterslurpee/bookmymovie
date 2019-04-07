@@ -16,9 +16,8 @@ public class MovieApplication {
 	}
 
 	@Bean
-	@Autowired
-	public TMDBRepository getTmdbRepository(MovieRepository movieRepository) throws Exception {
-		return new TMDBRepository(movieRepository);
+	public TMDBRepository getTmdbRepository() throws Exception {
+		return new TMDBRepository();
 	}
 
 	@Bean

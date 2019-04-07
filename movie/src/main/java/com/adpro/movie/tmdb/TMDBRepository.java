@@ -1,11 +1,10 @@
 package com.adpro.movie.tmdb;
 
-import com.adpro.movie.MovieRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -16,10 +15,10 @@ public class TMDBRepository {
     private static final String BASE_URL_STRING = "https://api.themoviedb.org/3/";
     private static final String KEY = "8d14316a3ad3955af1670a00e39e50ab";
 
-    @NotNull
+    @NonNull
     private TMDBClient tmdbClient;
 
-    public TMDBRepository(MovieRepository movieRepository) {
+    public TMDBRepository() {
         tmdbClient = new Retrofit.Builder()
                 .baseUrl(BASE_URL_STRING)
                 .addConverterFactory(JacksonConverterFactory.create())

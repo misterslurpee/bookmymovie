@@ -7,11 +7,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class MovieSession {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @NotNull
     private Long id;
 
     @OneToOne
@@ -24,39 +29,9 @@ public class MovieSession {
     @NotNull
     private LocalDateTime endTime;
 
-    protected MovieSession() {}
-
     public MovieSession(Movie movie, LocalDateTime startTime) {
         this.movie = movie;
         this.startTime = startTime;
         this.endTime = startTime.plus(movie.getDuration());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Movie getMovie() {
-        return movie;
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
     }
 }

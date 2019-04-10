@@ -1,0 +1,7 @@
+production:
+  type: deploy
+  script:
+  - apt-get update -qy
+  - git push https://:981516e4-012f-4451-9399-136c0c23871a@git.heroku.com/ap-c8-movie.git `git subtree split --prefix movie master`:master --force
+  only:
+  - movie-repo

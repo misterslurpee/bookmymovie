@@ -3,7 +3,7 @@ image: maven:3.6.0-jdk-11
 java:
   stage: test
   script:
-  - mvn verify
+  - mvn test
   artifacts:
     reports:
       junit:

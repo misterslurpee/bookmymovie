@@ -4,4 +4,4 @@ java:
   stage: test
   script:
   - mvn test -am
-  - mvn jacoco:report
+  - mvn org.jacoco:jacoco-maven-plugin:0.7.9:prepare-agent install org.jacoco:jacoco-maven-plugin:0.7.9:report

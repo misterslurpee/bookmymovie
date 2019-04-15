@@ -4,7 +4,4 @@ java:
   stage: test
   script:
   - mvn test -am
-  artifacts:
-    reports:
-      junit:
-        - target/site/jacoco/*
+  - mvn jacoco:report

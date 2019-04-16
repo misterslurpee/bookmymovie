@@ -3,5 +3,11 @@ image: maven:3.6.0-jdk-11
 java:
   stage: test
   script:
-  - mvn test -am
-  - mvn org.jacoco:jacoco-maven-plugin:0.7.9:prepare-agent install org.jacoco:jacoco-maven-plugin:0.7.9:report
+  - ./mvnw test -am
+  - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",
+    instructions, "instructions covered"; print 100*covered/instructions, "%
+    covered" }' target/site/jacoco-aggregate/jacoco.csv
+
+rspec:
+  script: rspec
+  coverage: ''\d+.\d+ \% covered'

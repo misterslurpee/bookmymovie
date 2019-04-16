@@ -3,8 +3,8 @@ image: maven:3.6.0-jdk-11
 java:
   stage: test
   script:
-  - ./mvnw test -am
-  - ./mvnw jacoco:report-aggregate
+  - mvn test -am
+  - mvn jacoco:report-aggregate
   - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",
     instructions, "instructions covered"; print 100*covered/instructions, "%
     covered" }' target/site/jacoco-aggregate/jacoco.csv

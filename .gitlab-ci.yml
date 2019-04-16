@@ -9,5 +9,9 @@ java:
     covered" }' target/site/jacoco-aggregate/jacoco.csv
 
 rspec:
+  stage: test
+  script: bundle exec rspec
+
+job1:
   script: rspec
   coverage: /\d+.\d+ \% covered/

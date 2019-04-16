@@ -8,6 +8,6 @@ java:
     instructions, "instructions covered"; print 100*covered/instructions, "%
     covered" }' target/site/jacoco-aggregate/jacoco.csv
 
-job1:
+rspec:
   script: rspec
-  coverage: '\d+.\d+ \% covered'
+  coverage: /\d+.\d+ \% covered/

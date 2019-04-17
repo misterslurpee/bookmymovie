@@ -3,9 +3,7 @@ package com.adpro.movie.tmdb;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import javax.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 public class FullTMDBMovie extends TMDBMovie {
     @NotNull

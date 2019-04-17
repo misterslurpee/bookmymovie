@@ -33,21 +33,21 @@ public class TMDBMovieScheduler {
         updateMovieList();
     }
 
-    private void updateMovieList() throws Exception {
+    public void updateMovieList() throws Exception {
         List<PartialTMDBMovie> movies = tmdbRepository.getLastMovies();
         List<Long> movieIds = new ArrayList<>();
         for (TMDBMovie movie: movies) {
             movieIds.add(movie.getId());
         }
 
-        Set<Long> existingMovies = movieRepository.findAllByTmdbId(movieIds)
+        Set<Long> existingMovieTmdbIds = movieRepository.findAllByTmdbId(movieIds)
                 .stream()
-                .map(Movie::getId)
+                .map(Movie::getTmdbId)
                 .collect(Collectors.toSet());
 
         List<Movie> notExistMovies = new ArrayList<>();
         for (PartialTMDBMovie movie: movies) {
-            if (!existingMovies.contains(movie.getId())) {
+            if (!existingMovieTmdbIds.contains(movie.getId())) {
                 FullTMDBMovie tmdbMovie = tmdbRepository.getMovie(movie.getId());
                 notExistMovies.add(Movie.fromTMDBMovie(tmdbMovie));
             }

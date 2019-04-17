@@ -34,7 +34,7 @@ public class MovieController {
     }
 
     @RequestMapping("/movies")
-    public List<Movie> movies() throws Exception {
+    public List<Movie> movies() {
         return movieListProxy.findMoviesByReleaseDateAfter(LocalDate.now().minusDays(7));
     }
 

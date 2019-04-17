@@ -1,5 +1,6 @@
 package com.adpro.movie.tmdb;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -31,24 +32,32 @@ public class TMDBRepository {
      * @param movieId the tmdb ID of the movie
      * @return the FullMovie object
      */
-    public FullTMDBMovie getMovie(Long movieId) throws Exception {
-        FullTMDBMovie fullTMDBMovie = tmdbClient.movie(movieId, KEY).execute().body();
-        if (fullTMDBMovie == null) {
-            throw new RuntimeException("Got null from TMDB API");
+    public FullTMDBMovie getMovie(Long movieId) {
+        try {
+            FullTMDBMovie fullTMDBMovie = tmdbClient.movie(movieId, KEY).execute().body();
+            if (fullTMDBMovie == null) {
+                throw new RuntimeException("Got null from TMDB API");
+            }
+            return fullTMDBMovie;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return fullTMDBMovie;
     }
 
-    public List<PartialTMDBMovie> getLastMovies() throws Exception {
+    public List<PartialTMDBMovie> getLastMovies() {
         String lastDate = LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_LOCAL_DATE);
         var params = Map.of(
                 "primary_release_date.gte", lastDate,
                 "with_original_language", "en"
         );
-        Page<PartialTMDBMovie> movies = tmdbClient.discover(KEY, params).execute().body();
-        if (movies == null) {
-            throw new RuntimeException("Got null from TMDB API");
+        try {
+            Page<PartialTMDBMovie> movies = tmdbClient.discover(KEY, params).execute().body();
+            if (movies == null) {
+                throw new RuntimeException("Got null from TMDB API");
+            }
+            return movies.getResults();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return movies.getResults();
     }
 }

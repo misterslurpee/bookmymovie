@@ -24,16 +24,16 @@ public class TMDBMovieScheduler {
     }
 
     @Scheduled(cron = "0 0 0 * * *")
-    public void midnightCron() throws Exception {
+    public void midnightCron() {
         updateMovieList();
     }
 
     @PostConstruct
-    public void postConstruct() throws Exception {
+    public void postConstruct() {
         updateMovieList();
     }
 
-    public void updateMovieList() throws Exception {
+    public void updateMovieList() {
         List<PartialTMDBMovie> movies = tmdbRepository.getLastMovies();
         List<Long> movieIds = new ArrayList<>();
         for (TMDBMovie movie: movies) {

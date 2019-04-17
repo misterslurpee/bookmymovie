@@ -16,7 +16,7 @@ public class MovieApplication {
 	}
 
 	@Bean
-	public TMDBRepository getTmdbRepository() throws Exception {
+	public TMDBRepository getTmdbRepository() {
 		return new TMDBRepository();
 	}
 

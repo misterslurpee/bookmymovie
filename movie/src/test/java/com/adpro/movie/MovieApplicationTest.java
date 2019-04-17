@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MovieApplicationTests {
+public class MovieApplicationTest {
 
 	@Autowired
 	private MockMvc mvc;

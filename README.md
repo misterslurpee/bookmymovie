@@ -1,5 +1,7 @@
 # Movie Ticket System
 
+![coverage](https://gitlab.com/ramadistra/spring/badges/master/coverage.svg)
+
 `Movie Ticket System` is an online platform to buy movie ticket.
 This project is created to complete Advanced Programming final project.
 

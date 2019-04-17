@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,41 +25,47 @@ public class MovieSessionScheduler {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void midnightCron() {
-        createMovieSession();
+        checkExistOrCreateMovieSession();
     }
 
     @PostConstruct
     public void postConstruct() {
-        createMovieSession();
+        checkExistOrCreateMovieSession();
     }
 
-    public void createMovieSession() {
+    public void checkExistOrCreateMovieSession() {
         List<Movie> movies = movieRepository.findMoviesByReleaseDateAfterAndReleaseDateBefore(
                 LocalDate.now().minusDays(14), LocalDate.now());
-        LocalDate dateNow = LocalDate.now();
 
         List<MovieSession> alreadyCreatedTodayMovieSession = movieSessionRepository.findMovieSessionsByStartTimeAfter(
                 LocalDate.now().atStartOfDay());
 
         if (alreadyCreatedTodayMovieSession.size() == 0) {
-            for (Movie movie : movies) {
-                long alreadyShowedFor = Period.between(movie.getReleaseDate(), dateNow).getDays();
-                if (alreadyShowedFor < 5) {
-                    movieSessionRepository.save(new MovieSession(movie,
-                            LocalDateTime.of(dateNow, LocalTime.of(10, 0))));
-                    movieSessionRepository.save(new MovieSession(movie,
-                            LocalDateTime.of(dateNow, LocalTime.of(13, 0))));
-                    movieSessionRepository.save(new MovieSession(movie,
-                            LocalDateTime.of(dateNow, LocalTime.of(17, 0))));
-                    movieSessionRepository.save(new MovieSession(movie,
-                            LocalDateTime.of(dateNow, LocalTime.of(20, 0))));
-                } else {
-                    movieSessionRepository.save(new MovieSession(movie,
-                            LocalDateTime.of(dateNow, LocalTime.of(13, 0))));
-                    movieSessionRepository.save(new MovieSession(movie,
-                            LocalDateTime.of(dateNow, LocalTime.of(20, 0))));
-                }
+            createMovieSession(movies);
+        }
+    }
+
+    private void createMovieSession(List<Movie> movies) {
+        LocalDate dateNow = LocalDate.now();
+        List<MovieSession> willBeInsertedMovieSession = new ArrayList<>();
+        for (Movie movie : movies) {
+            long alreadyShowedFor = Period.between(movie.getReleaseDate(), dateNow).getDays();
+            if (alreadyShowedFor < 5) {
+                willBeInsertedMovieSession.add(new MovieSession(movie,
+                        LocalDateTime.of(dateNow, LocalTime.of(10, 0))));
+                willBeInsertedMovieSession.add(new MovieSession(movie,
+                        LocalDateTime.of(dateNow, LocalTime.of(13, 0))));
+                willBeInsertedMovieSession.add(new MovieSession(movie,
+                        LocalDateTime.of(dateNow, LocalTime.of(17, 0))));
+                willBeInsertedMovieSession.add(new MovieSession(movie,
+                        LocalDateTime.of(dateNow, LocalTime.of(20, 0))));
+            } else {
+                willBeInsertedMovieSession.add(new MovieSession(movie,
+                        LocalDateTime.of(dateNow, LocalTime.of(13, 0))));
+                willBeInsertedMovieSession.add(new MovieSession(movie,
+                        LocalDateTime.of(dateNow, LocalTime.of(20, 0))));
             }
         }
+        movieSessionRepository.saveAll(willBeInsertedMovieSession);
     }
 }

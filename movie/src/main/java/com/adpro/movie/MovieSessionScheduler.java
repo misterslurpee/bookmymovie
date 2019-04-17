@@ -45,7 +45,7 @@ public class MovieSessionScheduler {
         }
     }
 
-    private void createMovieSession(List<Movie> movies) {
+    public void createMovieSession(List<Movie> movies) {
         LocalDate dateNow = LocalDate.now();
         List<MovieSession> willBeInsertedMovieSession = new ArrayList<>();
         for (Movie movie : movies) {

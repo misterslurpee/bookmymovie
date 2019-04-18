@@ -1,8 +1,8 @@
 package com.adpro.movie.tmdb;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 import com.adpro.movie.Movie;
 import com.adpro.movie.MovieRepository;
@@ -39,28 +39,27 @@ public class TMDBMovieSchedulerTest {
         PartialTMDBMovie newTMDBMovie = mapper.readValue("{\"id\": 2," +
                 "\"original_title\": \"[BUKAN] Fairuzi Adventures\"}", PartialTMDBMovie.class);
 
-        given(tmdbRepository.getLastMovies())
-                .willReturn(List.of(oldTMDBMovie, newTMDBMovie));
+        doReturn(List.of(oldTMDBMovie, newTMDBMovie))
+                .when(tmdbRepository).getLastMovies();
 
         Movie oldMovie = Movie.builder()
                 .tmdbId(1L)
                 .name("Fairuzi Adventures")
                 .build();
 ;
-        given(movieRepository.findAllByTmdbId(any()))
-                .willReturn(List.of(oldMovie));
+        doReturn(List.of(oldMovie))
+                .when(movieRepository).findAllByTmdbId(any());
 
         FullTMDBMovie fullNewTMDBMovie = mapper.readValue("{\"id\": 2," +
                 "\"original_title\": \"[BUKAN] Fairuzi Adventures\"," +
                 "\"runtime\": 120}", FullTMDBMovie.class);
 
-        given(tmdbRepository.getMovie(2L))
-                .willReturn(fullNewTMDBMovie);
+        doReturn(fullNewTMDBMovie)
+                .when(tmdbRepository).getMovie(2L);
 
         tmdbMovieScheduler.updateMovieList();
 
-        then(tmdbRepository)
-                .should()
+        verify(tmdbRepository)
                 .getMovie(2L);
     }
 }

@@ -1,6 +1,5 @@
 package com.adpro.movie;
 
-import com.adpro.movie.tmdb.TMDBRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
-
 
 @RestController
 public class MovieController {

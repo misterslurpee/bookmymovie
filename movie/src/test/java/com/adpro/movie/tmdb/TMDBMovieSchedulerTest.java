@@ -1,11 +1,14 @@
 package com.adpro.movie.tmdb;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
 import com.adpro.movie.Movie;
 import com.adpro.movie.MovieRepository;
+import com.adpro.movie.TestConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.Test;
@@ -17,7 +20,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = TestConfig.class)
 public class TMDBMovieSchedulerTest {
     @MockBean
     private TMDBRepository tmdbRepository;
@@ -39,27 +42,28 @@ public class TMDBMovieSchedulerTest {
         PartialTMDBMovie newTMDBMovie = mapper.readValue("{\"id\": 2," +
                 "\"original_title\": \"[BUKAN] Fairuzi Adventures\"}", PartialTMDBMovie.class);
 
-        doReturn(List.of(oldTMDBMovie, newTMDBMovie))
-                .when(tmdbRepository).getLastMovies();
+        FullTMDBMovie fullNewTMDBMovie = mapper.readValue("{\"id\": 2," +
+                "\"original_title\": \"[BUKAN] Fairuzi Adventures\"," +
+                "\"runtime\": 120}", FullTMDBMovie.class);
 
         Movie oldMovie = Movie.builder()
                 .tmdbId(1L)
                 .name("Fairuzi Adventures")
                 .build();
-;
-        doReturn(List.of(oldMovie))
-                .when(movieRepository).findAllByTmdbId(any());
 
-        FullTMDBMovie fullNewTMDBMovie = mapper.readValue("{\"id\": 2," +
-                "\"original_title\": \"[BUKAN] Fairuzi Adventures\"," +
-                "\"runtime\": 120}", FullTMDBMovie.class);
+        given(tmdbRepository.getLastMovies())
+                .willReturn(List.of(oldTMDBMovie, newTMDBMovie));
 
-        doReturn(fullNewTMDBMovie)
-                .when(tmdbRepository).getMovie(2L);
+        given(movieRepository.findAllByTmdbId(any()))
+                .willReturn(List.of(oldMovie));
+
+        given(tmdbRepository.getMovie(2L))
+                .willReturn(fullNewTMDBMovie);
 
         tmdbMovieScheduler.updateMovieList();
 
-        verify(tmdbRepository)
+        then(tmdbRepository)
+                .should()
                 .getMovie(2L);
     }
 }

@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = TestConfig.class)
 public class MovieSessionSchedulerTest {
 
     @MockBean
@@ -53,7 +53,8 @@ public class MovieSessionSchedulerTest {
                 .willReturn(Collections.emptyList());
 
         movieSessionScheduler.checkExistOrCreateMovieSession();
-        verify(movieSessionScheduler)
+        then(movieSessionScheduler)
+                .should()
                 .createMovieSession(any());
     }
 }

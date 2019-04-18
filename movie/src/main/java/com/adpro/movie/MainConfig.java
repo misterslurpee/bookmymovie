@@ -10,10 +10,10 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 @Configuration
 public class MainConfig {
-
     @Bean
-    public TMDBRepository getTmdbRepository() {
-        return new TMDBRepository();
+    @Autowired
+    public TMDBRepository getTmdbRepository(TMDBClient tmdbClient) {
+        return new TMDBRepository(tmdbClient);
     }
 
     @Bean

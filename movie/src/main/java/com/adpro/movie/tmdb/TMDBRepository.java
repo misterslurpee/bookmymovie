@@ -13,8 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TMDBRepository {
     private static final String KEY = "8d14316a3ad3955af1670a00e39e50ab";
 
-    @Autowired
     private TMDBClient tmdbClient;
+
+    @Autowired
+    public TMDBRepository(TMDBClient tmdbClient) {
+        this.tmdbClient = tmdbClient;
+    }
 
     /**
      * Get FullMovie from the individual movie API.

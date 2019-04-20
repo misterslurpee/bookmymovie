@@ -6,14 +6,16 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 
 public class FullTMDBMovie extends TMDBMovie {
+    static Duration DEFAULT_DURATION = Duration.ofMinutes(120);
+
     @NotNull
     @JsonProperty("runtime")
     @Getter
-    private Duration duration;
+    private Duration duration = DEFAULT_DURATION;
 
     public void setDuration(Long minDuration) {
         if (minDuration == null) {
-            duration = Duration.ofMinutes(120);
+            duration = DEFAULT_DURATION;
         } else {
             duration = Duration.ofMinutes(minDuration);
         }

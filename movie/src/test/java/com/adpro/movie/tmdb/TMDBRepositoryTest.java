@@ -1,5 +1,6 @@
 package com.adpro.movie.tmdb;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -61,6 +62,19 @@ public class TMDBRepositoryTest {
             tmdbRepository.getMovie(1L);
             fail("Should throw Exception");
         } catch (RuntimeException e) {}
+    }
+
+    @Test
+    public void givenNoRuntimeMovie_thenSetDefault() throws Exception {
+        FullTMDBMovie fullTMDBMovie = mapper.readValue("{\"id\": 1," +
+                "\"original_title\": \"Fairuzi Adventures\"," +
+                "\"runtime\": null}", FullTMDBMovie.class);
+        Call<FullTMDBMovie> fullTMDBMovieResponse = Calls.response(fullTMDBMovie);
+        given(tmdbClient.movie(any(), any()))
+                .willReturn(fullTMDBMovieResponse);
+
+        FullTMDBMovie movie = tmdbRepository.getMovie(1L);
+        assertEquals(FullTMDBMovie.DEFAULT_DURATION, movie.getDuration());
     }
 
     @Test

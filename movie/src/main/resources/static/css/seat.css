@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+        html {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            background-color: #222;
+            width: 100%;
+            height: 5em;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .square {
+            display: flex;
+            width: 25px;
+            height: 25px;
+            margin: 5px;
+            font-weight: bolder;
+            border-radius: 10px;
+            border: 1px solid rgb(0, 141, 134);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .white {
+            background-color: white;
+            color: #aaa;
+        }
+
+        .green.lighten {
+            background-color: rgb(0, 167, 158);
+            color: white;
+        }
+
+        .square:hover {
+            background-color: rgb(0, 167, 158);
+            color: white;
+        }
+
+        #rowseat {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #side1 {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #side2 {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #middle {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        #seats {
+            display: flex;
+            flex-direction: column;
+            z-index: -1;
+            position: absolute;
+            left: 50%;
+            top: 55%;
+            transform: translate(-50%,-50%);
+            width: auto;
+            height: auto;
+        }
+
+        .separate {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #screen {
+            border-top: 2px;
+            border-top-color: black;
+            border-top-style: solid;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #movie-section {
+            background-color: #222;
+            position: sticky;
+            width: 100vw;
+            height: auto;
+            color: white;
+            margin-bottom: 50px;
+            display: flex;
+        }
+
+        #movie-section h3 {
+            color: rgb(113, 204, 247);
+            padding-bottom: 5px;                   
+        }
+
+        #movie-section p {
+            padding-bottom: 2px;
+            font-size: 12px;    
+        }
+
+        #movie {
+            padding: 10px;
+        }
+
+        #description {
+            color: #ccc;
+            font-weight: bolder;
+        }
+
+        #back {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #back img {
+            padding: 10px;
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .segment {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 10px;
+        }
+
+        #option {
+            padding-top: 10px;
+            display: flex;
+        }
+
+        #option p {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        button {
+            background-color: white;
+            border: 0;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 5px;
+            font-weight: bolder;
+            color: #222;
+            cursor: pointer;
+        }
+
+        #time button {
+            margin-top: 5px;
+        }
+
+        #ticket-number {
+            background-color: white;
+            border: 0;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 5px;
+            font-weight: bolder;
+            color: #222;
+            cursor: pointer;
+        }
+
+        #ticket-number option {
+            background-color: white;
+            border: 0;
+            box-shadow: none;
+            border-radius: 0;
+            color: #aaa;
+            font-weight: bolder;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #444;
+            color: white;
+        }
+
+        button.accept:hover {
+            background-color: rgb(0, 167, 158);
+            color: white;
+        }
+        
+        button.active {
+            background-color: rgb(0, 167, 158);
+            color: white;
+            cursor: default;
+        }
+
+        button.active:hover {
+            background-color: rgb(0, 167, 158);
+            color: white;
+            cursor: default;
+        }
+
+
+        #submit {
+            display: flex;
+            align-items: flex-end;
+            margin: 20px;
+        }
+
+        button.accept {
+            height: 3em;
+            width: 8em;
+            align-items: center;
+            background-color: rgb(212, 69, 69);
+            color: white;
+        }
+
+        img#poster {
+            width: auto;
+            height: 10em;
+        }

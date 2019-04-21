@@ -1,4 +1,4 @@
-package com.adpro.movie;
+package com.adpro;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.any;
@@ -6,6 +6,11 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.adpro.movie.Movie;
+import com.adpro.movie.MovieListProxy;
+import com.adpro.movie.MovieSession;
+import com.adpro.movie.MovieSessionRepository;
+import com.adpro.seat.Theatre;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,14 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TestConfig.class)
+@SpringBootTest(classes = { TestConfig.class })
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = TestConfig.class)
 public class MovieApplicationTest {
 
 	@Autowired
@@ -92,5 +95,17 @@ public class MovieApplicationTest {
 						is(dayTime.format(DateTimeFormatter.ISO_DATE_TIME))))
 				.andExpect(jsonPath("$[1].startTime",
 						is(nightTime.format(DateTimeFormatter.ISO_DATE_TIME))));
+	}
+
+
+	@Test
+	public void getTheatreWithSeat() throws Exception {
+		Theatre theatre = new Theatre(1, "A", 50);
+
+		this.mvc.perform(get("/seat"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].seatNumber", is(1)))
+				.andExpect(jsonPath("$[0].type", is(theatre.getRows().get(0).getType())))
+				.andExpect(jsonPath("$[0].booked", is(theatre.getRows().get(0).isBooked())));
 	}
 }

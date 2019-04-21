@@ -1,4 +1,4 @@
-package com.adpro.movie;
+package com.adpro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

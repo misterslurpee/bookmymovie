@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Seat Available at ' + ${theatre}"></title>
+    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="js/seat.js"></script>
+    <link type="text/css" rel="stylesheet" href="css/seat.css">
+</head>
+<body>
+        <header id="movie-section">
+                <div id="back">
+                    <img src="http://thesaltgroup.com/wp-content/themes/ustrp/slide_lib/arrow-left.png" alt="back">
+                </div>
+                <img id="poster" src="https://assets.www.warnerbros.com/sites/default/files/movies/media/browser/Shazam_2000x3000.png" alt="poster">
+                <div id="movie">
+                    <div id="description">
+                        <h3>Shazam</h3>
+                        <p>Tomorrow, 13 April, 03:50 PM | English | 2D |</p>
+                        <p>Cinemaxx: Depok Town Square</p>
+                    </div>
+                    <div id="option">
+                        <div class="segment">
+                            <p>NUMBER OF TICKET</p>
+                            <select name="ticket" id="ticket-number">
+                                <option value="1">1 TICKET</option>
+                                <option value="2">2 TICKET</option>
+                                <option value="3">3 TICKET</option>
+                                <option value="4">4 TICKET</option>
+                            </select>
+                        </div>
+                        <div class="segment">
+                            <p>SHOWTIME</p>
+                            <div id="time">
+                                <button>01:10 pm</button>
+                                <button class="active">03:50 pm</button>
+                                <button>06:30 pm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+    <section id="seats">
+        <div id="screen">Screen</div>
+        <div class="separate">
+            <div id="side1"></div>
+            <div id="middle"></div>
+            <div id="side2"></div>
+        </div>
+    </section>
+    <footer>
+        <div id="submit">
+            <button class="accept" type="submit">Checkout</button>
+        </div>
+    </footer>
+</body>
+</html>

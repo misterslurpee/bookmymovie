@@ -3,6 +3,7 @@ package com.adpro.movie;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.adpro.TestConfig;
 import java.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -2,6 +2,7 @@ package com.adpro.movie;
 
 import static org.mockito.BDDMockito.*;
 
+import com.adpro.TestConfig;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Collections;

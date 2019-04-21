@@ -1,4 +1,4 @@
-package com.adpro.movie;
+package com.adpro;
 
 import static org.mockito.Mockito.mock;
 

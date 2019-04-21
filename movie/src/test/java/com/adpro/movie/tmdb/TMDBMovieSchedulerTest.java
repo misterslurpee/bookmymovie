@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 
 import com.adpro.movie.Movie;
 import com.adpro.movie.MovieRepository;
-import com.adpro.movie.TestConfig;
+import com.adpro.TestConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.Test;

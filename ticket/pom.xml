@@ -14,7 +14,7 @@
 	<name>ticket</name>
 	<description>Ticket microservice</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>10</java.version>
 	</properties>
 
 	<dependencies>
@@ -31,6 +31,23 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.6</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

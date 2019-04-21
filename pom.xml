@@ -67,6 +67,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*com/adpro/movie/MovieApplication.class</exclude>
+                        <exclude>**/*com/adpro/ticket/TicketApplication.class</exclude>
                     </excludes>
                 </configuration>
 

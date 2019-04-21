@@ -5,6 +5,10 @@
 `Movie Ticket System` is an online platform to buy movie ticket.
 This project is created to complete Advanced Programming final project.
 
+## Services
+Movie: http://ap-c8-movie.herokuapp.com  
+Ticket: http://c8-tickets-api.herokuapp.com/
+
 ## Developer Section
 
 ### Running The Code

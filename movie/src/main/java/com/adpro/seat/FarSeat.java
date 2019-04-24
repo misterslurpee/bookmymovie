@@ -1,19 +1,20 @@
 package com.adpro.seat;
 
 public class FarSeat extends Seat{
-    private int cost;
+    private static int cost;
 
     public FarSeat(boolean isBooked, int seatNumber) {
         super(isBooked, seatNumber);
-        cost = 35000;
+        cost = 40000;
         type = "Far";
     }
 
-    public int getCost() {
+    public static int getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public static void setCost(int cost) {
         cost = cost;
     }
+
 }

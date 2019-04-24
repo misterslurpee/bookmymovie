@@ -2,23 +2,27 @@ package com.adpro.seat;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 public class SeatController {
-    private Theatre theatre;
-
     public SeatController() {
-        this.theatre = new Theatre(1, "theatre A", 50);
+        Theatre theatre1 = new Theatre(1, "A",50);
+        theatre1.createRows();
+        Theatre.addingNewTheatreToList(theatre1);
     }
 
-    @RequestMapping("/seat")
-    public List<Seat> seatAPI() {
-        return this.theatre.getRows();
+    @GetMapping("/seat")
+    public @ResponseBody List<Theatre> seatAPI() {
+        return Theatre.getTheatres();
     }
+
+    @RequestMapping("/showing+seat")
+    public String showSeat(Model model) {
+        model.addAttribute("theatre", "CGV");
+        return "show-seat";
+    }
+
 }

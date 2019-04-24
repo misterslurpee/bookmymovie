@@ -10,7 +10,9 @@ import com.adpro.movie.Movie;
 import com.adpro.movie.MovieListProxy;
 import com.adpro.movie.MovieSession;
 import com.adpro.movie.MovieSessionRepository;
+import com.adpro.seat.MiddleSeat;
 import com.adpro.seat.Theatre;
+import com.adpro.seat.FarSeat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,10 +27,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { TestConfig.class })
 @AutoConfigureMockMvc
 public class MovieApplicationTest {
+    Theatre theatre1;
+    Theatre theatre2;
 
 	@Autowired
 	private MockMvc mvc;
@@ -97,15 +102,43 @@ public class MovieApplicationTest {
 						is(nightTime.format(DateTimeFormatter.ISO_DATE_TIME))));
 	}
 
+    @Test
+    public void createTheatreAndSeat() throws Exception {
+        theatre1 = new Theatre(1, "A", 50);
+        theatre2 = new Theatre(Theatre.getTheatres().get(0));
+        theatre1.createRows();
+        theatre2.createRows();
+        Theatre.addingNewTheatreToList(theatre2);
+        Theatre.addingNewTheatreToList(theatre1);
+    }
 
 	@Test
-	public void getTheatreWithSeat() throws Exception {
-		Theatre theatre = new Theatre(1, "A", 50);
-
-		this.mvc.perform(get("/seat"))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].seatNumber", is(1)))
-				.andExpect(jsonPath("$[0].type", is(theatre.getRows().get(0).getType())))
-				.andExpect(jsonPath("$[0].booked", is(theatre.getRows().get(0).isBooked())));
+	public void checkSetSeatCost() throws Exception {
+		FarSeat.setCost(FarSeat.getCost()+10000);
+		MiddleSeat.setCost(MiddleSeat.getCost()+10000);
 	}
+
+	@Test
+    public void checkBookingSeatAvailable() throws Exception {
+        Theatre.getTheatres().get(0).getRows().get(0).booked();
+        Theatre.getTheatres().get(0).getRows().get(0).unbooked();
+    }
+
+	@Test
+    public void synchronizeAPIWithTheatreAndSeat() throws Exception {
+        this.mvc.perform(get("/seat"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].theatreNumber", is(Theatre.getTheatres().get(0).getTheatreNumber())))
+                .andExpect(jsonPath("$[0].description", is(Theatre.getTheatres().get(0).getDescription())))
+                .andExpect(jsonPath("$[0].seatCount", is(Theatre.getTheatres().get(0).getSeatCount())))
+                .andExpect(jsonPath("$[0].rows[0].type", is(Theatre.getTheatres().get(0).getRows().get(0).getType())))
+                .andExpect(jsonPath("$[0].rows[0].booked", is(Theatre.getTheatres().get(0).getRows().get(0).isBooked())));
+    }
+
+    @Test
+    public void ShowingSeat() throws Exception {
+        this.mvc.perform(get("/showing+seat"))
+                .andExpect(status().isOk());
+
+    }
 }
